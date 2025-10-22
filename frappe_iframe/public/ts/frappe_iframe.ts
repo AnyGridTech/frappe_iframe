@@ -1,15 +1,3 @@
-/// <reference types="jquery" />
-
-import { FrappeForm } from "@anygridtech/frappe-types/client/frappe/core";
-
-declare global {
-  interface Window {
-    cur_frm?: FrappeForm;
-    frappe: any;
-  }
-  var frappe_iframe: any;
-}
-
 frappe.provide("frappe_iframe");
 
 const MODAL_STYLE = `
@@ -92,7 +80,7 @@ const iframe_view = {
         return (window as any).__growatt_iframe_modal;
       }
 
-      const d = new frappe.ui.Dialog({
+      const dialog = new frappe.ui.Dialog({
         title: __("Documento"),
         size: "extra-large",
         fields: [],
@@ -116,10 +104,10 @@ const iframe_view = {
       function createIframe() {
         iframe = $(`<iframe style="${IFRAME_STYLE}" sandbox="allow-scripts allow-same-origin"></iframe>`);
         iframeWrapper.empty().append(iframe);
-        d.body.appendChild(iframeWrapper[0]);
+        dialog['body'].appendChild(iframeWrapper[0]);
 
         iframe.on("load", () => {
-          const lockedName = (d as any).__doc_locked_name;
+          const lockedName = (dialog as any).__doc_locked_name;
           try {
             const doc = (iframe![0] as HTMLIFrameElement).contentDocument || (iframe![0] as HTMLIFrameElement).contentWindow?.document;
             if (!doc) throw new Error("Sem acesso ao iframe");
@@ -137,12 +125,12 @@ const iframe_view = {
 
       createIframe();
 
-      d.add_custom_action(__("Abrir em nova aba"), () => {
+      dialog['add_custom_action'](__("Abrir em nova aba"), () => {
         const url = iframe?.attr("src");
         window.open(url!, "_blank");
       });
 
-      d.add_custom_action(__("Copiar link"), async () => {
+      dialog['add_custom_action'](__("Copiar link"), async () => {
         try {
           await navigator.clipboard.writeText(iframe?.attr("src")!);
           frappe.show_alert({ message: __("Link copiado"), indicator: "green" });
@@ -151,10 +139,10 @@ const iframe_view = {
         }
       });
 
-      setTimeout(() => setFooterButtonsPrimary($(d.$wrapper)), 0);
+      setTimeout(() => setFooterButtonsPrimary($(dialog['$wrapper'])), 0);
 
       const modalAPI = {
-        dialog: d,
+        dialog: dialog,
         get iframe() {
           return iframe ? (iframe[0] as HTMLIFrameElement) : null;
         },
@@ -162,15 +150,15 @@ const iframe_view = {
           // Remove iframe anterior e cria novo
           createIframe();
           iframe!.attr("src", url);
-          d.set_title(displayTitle || __("Documento"));
-          (d as any).__doc_locked_name = originalDocName;
-          d.show();
+          dialog.set_title(displayTitle || __("Documento"));
+          (dialog as any).__doc_locked_name = originalDocName;
+          dialog.show();
         },
         hide() {
           // Remove iframe do DOM para descarregar página
           iframeWrapper.empty();
           iframe = null;
-          d.hide();
+          dialog.hide();
         },
       };
 
@@ -186,5 +174,3 @@ const iframe_view = {
     modal.show(url, displayTitle, docname);
   },
 };
-
-frappe_iframe = iframe_view;
