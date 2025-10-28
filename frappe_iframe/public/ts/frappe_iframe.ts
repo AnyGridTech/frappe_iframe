@@ -1,4 +1,4 @@
-frappe.provide("frappe_iframe");
+"use strict"
 
 const MODAL_STYLE = `
   width: 100%;

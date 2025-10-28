@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./ts",
+    "rootDir": ".",
     "outDir": "./js",
     "module": "preserve",
     "target": "ESNext",
@@ -13,7 +13,8 @@
       "@anygridtech/frappe-agt-types",
       "@anygridtech/frappe-types"
     ],
-    "sourceMap": true,
+    "sourceMap": false,
+    "allowSyntheticDefaultImports": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
@@ -26,14 +27,10 @@
     "strict": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
+    "moduleDetection": "force"
   },
-  "include": [
-    "ts/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["ts/**/*.ts", "**/ts/**/*.ts"],
+  "exclude": ["node_modules", "**/__bundle_entry__.ts"],
   "watchOptions": {
     "watchFile": "fixedPollingInterval",
     "watchDirectory": "fixedPollingInterval",
