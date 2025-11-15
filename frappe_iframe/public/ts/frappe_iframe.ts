@@ -1,4 +1,4 @@
-"use strict"
+frappe.provide("frappe.iframe");
 
 const MODAL_STYLE = `
   width: 100%;
@@ -174,3 +174,6 @@ const iframe_view = {
     modal.show(url, displayTitle, docname);
   },
 };
+
+// @ts-ignore - frappe.provide cria o namespace iframe
+frappe.iframe.view = iframe_view;
